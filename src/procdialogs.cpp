@@ -275,12 +275,12 @@ show_kill_dialog_toggled (GtkToggleButton *button, gpointer data)
 
 
 static void
-solaris_mode_toggled(GtkToggleButton *button, gpointer data)
+solaris_mode_changed(GtkComboBox *combo, gpointer data)
 {
 	ProcData *procdata = static_cast<ProcData*>(data);
 	GConfClient *client = procdata->client;
 	gboolean toggled;
-	toggled = gtk_toggle_button_get_active(button);
+	toggled = (gtk_combo_box_get_active(combo) == 1);
 	gconf_client_set_bool(client, procman::gconf::solaris_mode.c_str(), toggled, NULL);
 }
 
@@ -600,16 +600,17 @@ procdialog_create_preferences_dialog (ProcData *procdata)
 	hbox2 = gtk_hbox_new(FALSE, 6);
 	gtk_box_pack_start(GTK_BOX(vbox2), hbox2, FALSE, FALSE, 0);
 
-	GtkWidget *solaris_button;
-	solaris_button = gtk_check_button_new_with_mnemonic(_("Solaris mode"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(solaris_button),
+	GtkWidget *solaris_combo = gtk_combo_box_new_text();
+	gtk_combo_box_append_text(GTK_COMBO_BOX(solaris_combo), _("Default mode"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(solaris_combo), _("Solaris mode"));
+
+	gtk_combo_box_set_active(GTK_COMBO_BOX(solaris_combo),
 				     gconf_client_get_bool(procdata->client,
 							   procman::gconf::solaris_mode.c_str(),
-							   NULL));
-	g_signal_connect(G_OBJECT(solaris_button), "toggled",
-			 G_CALLBACK(solaris_mode_toggled), procdata);
-	gtk_box_pack_start(GTK_BOX(hbox2), solaris_button, TRUE, TRUE, 0);
-
+							   NULL) ? 1 : 0);
+	g_signal_connect(G_OBJECT(solaris_combo), "changed",
+			 G_CALLBACK(solaris_mode_changed), procdata);
+	gtk_box_pack_start(GTK_BOX(hbox2), solaris_combo, TRUE, TRUE, 0);
 
 
 
