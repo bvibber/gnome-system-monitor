@@ -601,8 +601,8 @@ procdialog_create_preferences_dialog (ProcData *procdata)
 	gtk_box_pack_start(GTK_BOX(vbox2), hbox2, FALSE, FALSE, 0);
 
 	GtkWidget *solaris_combo = gtk_combo_box_new_text();
-	gtk_combo_box_append_text(GTK_COMBO_BOX(solaris_combo), _("Default mode"));
-	gtk_combo_box_append_text(GTK_COMBO_BOX(solaris_combo), _("Solaris mode"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(solaris_combo), _("Calculate CPU percentage per core"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(solaris_combo), _("Calculate CPU percentage across all cores"));
 
 	gtk_combo_box_set_active(GTK_COMBO_BOX(solaris_combo),
 				     gconf_client_get_bool(procdata->client,
